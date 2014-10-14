@@ -63,6 +63,10 @@ def handle_char():
                 if chars[i] == "[":
                     pos = i
                     break
+    elif chars[pos] == "?":
+        ptrs[ptr] = pos
+    elif chars[pos] == "!":
+        pos = ptrs[ptr]
 
 
 if __name__ == "__main__":
@@ -71,14 +75,14 @@ if __name__ == "__main__":
     parser.add_argument('--interactive', '-i', action='store_true', help="Enable interactive mode.")
     parser.add_argument('file', help="The brainfuck file.")
     args = parser.parse_args()
-    chars = "".join([c for array in open(args.file).read() for c in array if c in "+-<>.,[]"])
+    chars = "".join([c for array in open(args.file).read() for c in array if c in "+-<>.,[]?!"])
     while pos < len(chars):
         result = handle_char()
         if args.debug:
             if result is not None:
                 output += result
             print("{0}({1}){2} *(pos) = {3}".format(chars[0:pos] if pos != 0 else "", chars[pos],
-                                                    chars[pos + 1:len(chars) - 1], pos))
+                                                    chars[pos + 1:len(chars)], pos))
             print("Pointers {{ptrs}} (ptr): {0}".format(repr_dict(ptrs, ptr)))
             print("Current output: \"{0}\"".format(output))
             print()
